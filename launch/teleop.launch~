@@ -7,7 +7,7 @@
     <param name="autorepeat_rate" value="20" />
   </node>
 
-  <node pkg="teleop_twist_joy" name="teleop_twist_joy" type="teleop_node">
+  <node pkg="teleop_twist_joy" name="teleop_twist_joy_node" type="teleop_node">
     <param name="axis_lenear" value="1" />
     <param name="scale_lenear" value="0.3" />
     <param name="scale_lenear_turbo" value="0.6" />

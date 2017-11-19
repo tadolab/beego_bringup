@@ -4,7 +4,7 @@
 
   <node pkg="tf" type="static_transform_publisher"
         name="link_to_laser_back_broadcaster" 
-        args="0 0  0 0 0 /base_link /laser_back 10"/>
+        args="0 0 0.15 0 0 0 /base_link /laser 10"/>
 
   <node pkg="tf" type="static_transform_publisher"
         name="link_to_base_broadcaster"
