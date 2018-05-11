@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+<launch>
+  <!--  Global Planner -->
+  <node name="hsas_global" pkg="hybrid_astar" type="path_planner" output="screen" >
+    <remap from="planner_map"           to="hsas_global/planner_map" />
+    <remap from="sPathNodes"            to="hsas_global/sPathNodes" />
+    <remap from="sPathVehicle"          to="hsas_global/sPathVehicle" />
+    <remap from="pathNodes"             to="hsas_global/pathNodes" />
+    <remap from="pathVehicle"           to="hsas_global/pathVehicle" />
+
+    <rosparam command="load" file="$(find hybrid_astar_move_base)/config/common.yaml" />
+    <rosparam command="load" file="$(find hybrid_astar_move_base)/config/global.yaml" />
+  </node>
+
+  <!--  Local Planner -->
+  <node name="hsas_local" pkg="hybrid_astar" type="path_planner" output="screen" >
+    <remap from="planner_map"           to="hsas_local/planner_map" />
+    <remap from="sPathNodes"            to="hsas_local/sPathNodes" />
+    <remap from="sPathVehicle"          to="hsas_local/sPathVehicle" />
+    <remap from="pathNodes"             to="hsas_local/pathNodes" />
+    <remap from="pathVehicle"           to="hsas_local/pathVehicle" />
+
+    <rosparam command="load" file="$(find hybrid_astar_move_base)/config/common.yaml" />
+    <rosparam command="load" file="$(find hybrid_astar_move_base)/config/local.yaml" />
+  </node>
+
+  <!-- cmd_vel publisher -->
+  <node name="tracker" pkg="trajectory_tracker" type="trajectory_tracker" >
+    <remap from="status" to="tracking_status" />
+
+    <rosparam command="load" file="$(find hybrid_astar_move_base)/config/trajectory_tracker.yaml" />
+    <param name="path" value="move_base/local/sPath" />
+  </node>
+
+  <!-- Arguments and setup for move_base -->
+  <arg name="no_static_map" default="false"/>
+  <arg name="base_global_planner" default="HybridAStar/HybridAStarGlobalPlanner" />
+  <arg name="base_local_planner" default="HybridAStar/HybridAStarLocalPlanner" />
+
+  <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen" >
+    <rosparam file="$(find hybrid_astar_move_base)/config/move_base/common.yaml" command="load" />
+
+    <!-- Global Costmap -->
+    <param name="base_global_planner" value="$(arg base_global_planner)" />
+    <rosparam file="$(find hybrid_astar_move_base)/config/move_base/costmap_common.yaml" command="load" ns="global_costmap" />
+    <rosparam file="$(find hybrid_astar_move_base)/config/move_base/costmap_global_static.yaml" command="load" ns="global_costmap" unless="$(arg no_static_map)" />
+    <rosparam file="$(find hybrid_astar_move_base)/config/move_base/costmap_global_laser.yaml" command="load" ns="global_costmap" if="$(arg no_static_map)" />
+    <param name="global_costmap/width" value="100.0" if="$(arg no_static_map)" />
+    <param name="global_costmap/height" value="100.0" if="$(arg no_static_map)" />
+
+    <!-- Local Costmap -->
+    <param name="base_local_planner" value="$(arg base_local_planner)" />
+    <rosparam file="$(find hybrid_astar_move_base)/config/move_base/costmap_common.yaml" command="load" ns="local_costmap" />
+    <rosparam file="$(find hybrid_astar_move_base)/config/move_base/costmap_local.yaml" command="load" ns="local_costmap" />
+
+    <!-- Hybrid State A* -->
+    <rosparam file="$(find hybrid_astar_move_base)/config/move_base/hybrid_astar.yaml" command="load" />
+    <param name="HybridAStarGlobalPlanner/topic_prefix" value="move_base/global" />
+    <param name="HybridAStarLocalPlanner/topic_prefix" value="move_base/local" />
+  </node>
+</launch>

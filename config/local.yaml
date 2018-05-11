@@ -1,0 +1,24 @@
+# Should be hsas_local when used with HybridAStarLocalPlanner
+action_name            : hsas_local
+cell_size              : 0.5
+pose_distance          : 0.5
+enable_dubins_shot     : true
+no_circular_path       : true
+goal_tolerance_xy      : -1
+goal_tolerance_heading : -1
+
+penalty:
+  steering               : 1.0
+  non_straight           : 1.0
+  reversing              : 2.0
+  drive_direction_change : 2.0
+
+smoother:
+  step_size      : 50
+  iterations     : 10
+  cg_alpha       : 0.02
+  weight:
+    obstacle   : 0.3
+    curvature  : 0.6
+    smoothness : 0.4
+    voronoi    : 0.0

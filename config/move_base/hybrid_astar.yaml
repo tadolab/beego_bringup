@@ -1,0 +1,16 @@
+HybridAStarGlobalPlanner:
+  # Note: Set in launch file
+  # topic_prefix  : move_base/global
+  allow_unknown : true
+  use_inflation : true
+  timeout       : 10.0
+
+HybridAStarLocalPlanner:
+  # Note: Set in launch file
+  # topic_prefix       : move_base/local
+  allow_unknown      : true
+  use_inflation      : true
+  xy_goal_tolerance  : 0.2
+  # 30 degrees
+  yaw_goal_tolerance : 0.5235987755983
+  timeout            : 0.5

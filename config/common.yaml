@@ -1,0 +1,10 @@
+vehicle_width          : 0.176
+vehicle_height         : 0.25
+reverse                : true
+min_turning_radius     : 0.5
+empty_threshold        : 0.80
+visualization          : false
+
+smoother:
+  obst_influence : 0.5
+  kappa_max      : 2.0
